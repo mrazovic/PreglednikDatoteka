@@ -1,4 +1,4 @@
-# PreglednikDatoteka
+# Preglednik Datoteka
 
 Ovo je početni programski kôd preglednika datoteka napravljen na .NET Core platofrmi, verzija 2.2. Kôd je minimalan, rudimentaran s ogromnim prostorm za poboljšanja. 
 

@@ -13,3 +13,9 @@ https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project
 
 Ističem jedino BRANCH! --> "The number one rule is to put each piece of work on its own branch."
 
+# Što točno?
+
+Vidi ovdje:
+
+https://github.com/mkukec/PreglednikDatoteka/issues
+

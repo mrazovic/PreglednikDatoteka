@@ -9,6 +9,7 @@ Pozivam studente MEV-a da se u okviru predmeta Operacijski sustavi priključe ra
 Nudim odgovor u vidu kratkih uputa ovdje:
 
 https://akrabat.com/the-beginners-guide-to-contributing-to-a-github-project/#summary
+
 https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project
 
 Ističem jedino BRANCH! --> "The number one rule is to put each piece of work on its own branch."

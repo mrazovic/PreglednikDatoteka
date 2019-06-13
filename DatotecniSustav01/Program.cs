@@ -1,64 +1,29 @@
 ﻿using System;
 using System.IO;
-
+using System.Collections.Generic;
+
 namespace DatotecniSustav01
 {
     class Program
     {
         static void Main(string[] args)
         {
-            string direktorij = @"C:\";
-            DirectoryInfo dirInfo = new DirectoryInfo(direktorij);
-
-            var datoteke = dirInfo.GetFiles();
-            long velicina = 0;
-
-            Console.WriteLine("+------------------+-------------+---------+------------------------------------------+");
-            Console.WriteLine("| Veličina       B |          KB |      MB | Nazivi datoteka                          |");
-            Console.WriteLine("+------------------+-------------+---------+------------------------------------------+");
-            foreach (FileInfo d in datoteke)
-            {
-                velicina += d.Length;
-                Console.WriteLine("|{0, 15} B | {1, 8} KB | {2, 4} MB | {3,40} |", 
-                    d.Length, 
-                    d.Length / 1024, 
-                    d.Length / (1024 * 1024),
-                    d.FullName);
-            }
-            Console.WriteLine("+------------------+-------------+---------+------------------------------------------+");
-            Console.WriteLine("|{0, 15} B | {1, 8} KB | {2, 4} MB |                                          |",
-                velicina,
-                velicina / 1024,
-                velicina / (1024 * 1024));
-            Console.WriteLine("+------------------+-------------+---------+------------------------------------------+");
-
-            Console.SetCursorPosition(1, 3);
-            Console.Write(">");
-            int brojRedova = datoteke.Length + 6;
-
-            int cekanjeTreperenje = 500;
-            Console.CursorVisible = false;
-            int pokazivacY = 3;
-            while (true)
-            {
-                System.Threading.Thread.Sleep(cekanjeTreperenje);
-                Console.SetCursorPosition(1, pokazivacY);
-                Console.Write(" ");
-                System.Threading.Thread.Sleep(cekanjeTreperenje);
-                Console.SetCursorPosition(1, pokazivacY);
-                Console.Write(">");
-
-                if (Console.KeyAvailable)
-                {
-                    ConsoleKeyInfo pritisnutaTipka = Console.ReadKey(true);
-                    if (pritisnutaTipka.Key == ConsoleKey.DownArrow)
-                    {
-                        pokazivacY++;
-                    }
-                }
-            }
-
-            // Console.SetCursorPosition(0, brojRedova);
-        } //Main
-    }
-}
+            string direktorij = args[0];
+            //provjera direktorija
+            if (Directory.Exists(direktorij))            {                DirectoryInfo dirInfo = new DirectoryInfo(direktorij);                var datoteke = dirInfo.GetFiles();                long velicina = 0;                DirectoryInfo dir = new DirectoryInfo(direktorij);                Console.WriteLine("+------------------+-------------+---------+------------------------------------------+");                Console.WriteLine("| Veličina       B |          KB |      MB | Nazivi datoteka                          |");                Console.WriteLine("+------------------+-------------+---------+------------------------------------------+");
+                foreach (FileInfo d in datoteke)                    if (Directory.Exists(direktorij))                    {                        velicina += d.Length;                        Console.WriteLine("|{0, 15} B | {1, 8} KB | {2, 4} MB | {3,40} |",                            d.Length,                            d.Length / 1024,                            d.Length / (1024 * 1024),                            d.FullName);                        var direktoriji = dir.GetDirectories();                        List<DirectoryInfo> dirs = new List<DirectoryInfo>(direktoriji);                        List<FileInfo> files = new List<FileInfo>(datoteke);
+                        Console.WriteLine("+------------------+-------------+---------+------------------------------------------+");                        Console.WriteLine("| Veličina       B |          KB |      MB | Naziv  datoteke                          |");                        Console.WriteLine("| Veličina       B |          KB |      MB | Naziv  direktorija/datoteke              |");                        Console.WriteLine("+------------------+-------------+---------+------------------------------------------+");
+                        foreach (FileInfo fi in datoteke)                        {                            foreach (DirectoryInfo di in dirs)                            {
+                                long velicinaDir = 0;                                FileInfo[] fileInfos = di.GetFiles();                                //petlja za racunanje ukupne veličine datoteka u direktoriju                                foreach (FileInfo f in fileInfos)                                {                                    velicinaDir += f.Length;                                }
+                                Console.WriteLine("|{0, 15} B | {1, 8} KB | {2, 4} MB | {3,40} |",                                    velicinaDir,
+                                    //velicina u KB
+                                    velicinaDir / 1024,
+                                    //velicina u MB
+                                    velicinaDir / (1024 * 1024),                                    di.Name);
+                            }                            foreach (FileInfo f in files)                            {                                velicina += f.Length;                                Console.WriteLine("|{0, 15} B | {1, 8} KB | {2, 4} MB | {3,40} |",                                    f.Length,
+                                    //velicina u KB
+                                    f.Length / 1024,
+                                    //Velicina u MB
+                                    f.Length / (1024 * 1024),                                    f.FullName);                            }                            Console.WriteLine(velicina / (1024 * 1024));                        }                        Console.WriteLine("+------------------+-------------+---------+------------------------------------------+");                        Console.SetCursorPosition(1, 3);                        Console.SetCursorPosition(1, 3);                        Console.Write(">");
+                    }                Console.WriteLine("+------------------+-------------+---------+------------------------------------------+");                Console.WriteLine("|{0, 15} B | {1, 8} KB | {2, 4} MB |                                          |",                    velicina,                    velicina / 1024,                    velicina / (1024 * 1024));                Console.WriteLine("+------------------+-------------+---------+------------------------------------------+");                Console.SetCursorPosition(1, 3);                Console.Write(">");
+            }            //dohvat diska            else            {                //omogucena fleksibilnost tablice                DriveInfo[] diskovi = DriveInfo.GetDrives();                int najveceIme = 0;                foreach (DriveInfo d in diskovi)                {                    if (d.IsReady)                    {                        if (d.VolumeLabel.Length > najveceIme)                        {                            najveceIme = d.VolumeLabel.Length;                        }                    }                }                Console.Write("+------------------+---------------+---------+-----------+"); Console.Write("-".PadRight(najveceIme, '-')); Console.WriteLine("+");                Console.Write("| Oznaka diska     |Ukupna veličina|Slobodno |     %     |"); Console.Write("Naziv Diska".PadRight(najveceIme)); Console.WriteLine("+");                Console.Write("+------------------+---------------+---------+-----------+"); Console.Write("-".PadRight(najveceIme, '-')); Console.WriteLine("+");                foreach (DriveInfo d in diskovi)                {                    if (d.IsReady)                    {                        Console.Write("|{0, 16}  | {1, 10} GB | {2, 4} GB | {3, 7} % |",                        d.Name,                        d.TotalSize / (1024 * 1024 * 1024),                        d.TotalFreeSpace / (1024 * 1024 * 1024),                        Math.Round(((double)d.TotalFreeSpace / (double)d.TotalSize) * 100, 2));                        Console.Write("{0}".PadRight((najveceIme + 3) - d.VolumeLabel.Length), d.VolumeLabel); Console.WriteLine("|");                    }                    else                    {                        Console.Write("|{0, 16}  | {1, 12}  | {2, 6}  | {3, 8}  |", d.Name, "n/a", "n/a", "n/a");                        Console.Write("n/a".PadRight((najveceIme))); Console.WriteLine("|");                    }                }                Console.Write("+------------------+---------------+---------+-----------+"); Console.Write("-".PadRight((najveceIme), '-')); Console.WriteLine("+");            }            Console.ReadKey();        }    } //Main}
